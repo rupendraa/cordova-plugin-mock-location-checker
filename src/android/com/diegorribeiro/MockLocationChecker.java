@@ -50,9 +50,9 @@ public class MockLocationChecker extends CordovaPlugin{
             }
 			Log.i("Location", "isMock: "+objGPS.get("isMock"));
             callbackContext.success(objGPS);
-			return false;
-        } else {
 			return true;
+        } else {
+			return false;
         }
 
     }
