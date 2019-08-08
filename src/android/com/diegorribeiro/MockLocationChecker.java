@@ -30,11 +30,12 @@ public class MockLocationChecker extends CordovaPlugin{
     private JSONObject objGPS = new JSONObject();
     private com.sandata.MockGpsChecker mContext;
 
-
+	
     @Override
     public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
-
+	
         if (action.equals("check")) {
+	    cordova.getThreadPool().execute(new Runnable() {public void run() {
             if (android.os.Build.VERSION.SDK_INT < 18) {
                 if (Secure.getString(this.cordova.getActivity().getContentResolver(), Secure.ALLOW_MOCK_LOCATION).equals("0")){
                     objGPS.put("isMock",false);
@@ -52,6 +53,7 @@ public class MockLocationChecker extends CordovaPlugin{
 			System.println("isMock>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+objGPS.get("isMock"));
             callbackContext.success(objGPS);
 			return true;
+	    }})    
         } else {
 			System.println("MAMPUSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
 
