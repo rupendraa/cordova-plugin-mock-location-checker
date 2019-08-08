@@ -26,17 +26,10 @@ public class MockLocationChecker extends CordovaPlugin{
 
     private int MY_PERMISSIONS_REQUEST = 0;
 
-    // flag for GPS status
-    boolean isGPSEnabled = false;
-
-    // flag for network status
-    boolean isNetworkEnabled = false;
-    private String LOCATION_PROVIDER = "";
-    LocationListener locationListener;
-    private boolean listenerON = false;
-    private String statusMock = "";
     private JSONArray arrayGPS = new JSONArray();
     private JSONObject objGPS = new JSONObject();
+    private com.sandata.MockGpsChecker mContext;
+
 
     @Override
     public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
@@ -44,36 +37,24 @@ public class MockLocationChecker extends CordovaPlugin{
         if (action.equals("check")) {
             if (android.os.Build.VERSION.SDK_INT < 18) {
                 if (Secure.getString(this.cordova.getActivity().getContentResolver(), Secure.ALLOW_MOCK_LOCATION).equals("0")){
-                    objGPS.put("info","mock-false");
-                  statusMock = "mock-false";
-                }else{
-                    objGPS.put("info","mock-true");
-                  statusMock = "mock-true";
-                }
-
-            } else {
-
-                if (location.isFromMockProvider() == true) {
-                    objGPS.put("info","mock-true");
-                    statusMock = "mock-true";
+                    objGPS.put("isMock",false);
                 } else {
-                    objGPS.put("info","mock-false");
-                    statusMock = "mock-false";
+                    objGPS.put("isMock",true);
                 }
-
+            } else {
+                if (location.isFromMockProvider() == true) {
+                    objGPS.put("isMock",false);
+                } else {
+                    objGPS.put("isMock",true);
+                }
             }
-          return true;
-        }else {
-          return false;
+			Log.i("Location", "isMock: "+objGPS.get("isMock"));
+            callbackContext.success(objGPS);
+			return true;
+        } else {
+			return false;
         }
 
-    }
-
-    private String formatDate(Date date){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String format = formatter.format(date);
-
-        return format;
     }
 
 }
