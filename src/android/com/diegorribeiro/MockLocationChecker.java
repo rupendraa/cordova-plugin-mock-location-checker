@@ -27,7 +27,7 @@ public class MockLocationChecker extends CordovaPlugin{
     private int MY_PERMISSIONS_REQUEST = 0;
 
     private boolean isMock = false;
-    private com.diegorribeiro.MockGpsChecker mContext;
+    private com.diegorribeiro.MockLocationChecker mContext;
 
 	
     @Override
